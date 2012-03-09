@@ -8,27 +8,24 @@ import java.util.Properties;
 
 public class Main {
 
-	// TODO: replace with current API-key and secret
-	private static String API_KEY = null;
-	private static String API_SECRET = null;
-
 	/**
 	 * @param args
 	 */
 	public static void main(String[] args) {
 
-		readAPISettings();
-		System.out.println(API_KEY + " " + API_SECRET);
+		String[] keys = readAPIKeys();
+		System.out.println(keys[0] + " " + keys[1]);
 
 	}
 
-	public static void readAPISettings() {
+	public static String[] readAPIKeys() {
+		String[] keys = new String[2];
 		Properties properties = new Properties();
 		try {
 			properties.load(new FileInputStream(File.separator
 					+ "linkedin.properties"));
-			API_KEY = properties.getProperty("API_KEY");
-			API_SECRET = properties.getProperty("API_SECRET");
+			keys[0] = properties.getProperty("API_KEY");
+			keys[1] = properties.getProperty("API_SECRET");
 		} catch (FileNotFoundException e) {
 			System.err.println("Properties file not found!");
 			e.printStackTrace();
@@ -36,6 +33,8 @@ public class Main {
 			System.err.println("Could not read API-key properly!");
 			e.printStackTrace();
 		}
+
+		return keys;
 	}
 
 }
