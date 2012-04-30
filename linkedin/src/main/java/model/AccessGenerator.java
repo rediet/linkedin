@@ -1,7 +1,5 @@
 package model;
 
-//test
-
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
@@ -17,11 +15,26 @@ import org.scribe.model.Token;
 import org.scribe.model.Verifier;
 import org.scribe.oauth.OAuthService;
 
+/**
+ * The AccessGenerator class elaborates connection to an OAuth service and
+ * builds the necessary OAuthService object to do API calls. It is also used to
+ * obtain an access token to permit API access from the view of a particular
+ * user.
+ */
 public class AccessGenerator {
 
 	private OAuthService service;
 	private Token accessToken;
 
+	/**
+	 * Creates a new AccessGenerator instance and builds an initial service
+	 * based on the API key and secret without requesting an access token.
+	 * 
+	 * @param apiKey
+	 *            The API key
+	 * @param apiSecret
+	 *            The API secret
+	 */
 	public AccessGenerator(String apiKey, String apiSecret) {
 		service = new ServiceBuilder().provider(LinkedInApi.class)
 				.apiKey(apiKey).apiSecret(apiSecret).build();
@@ -44,6 +57,12 @@ public class AccessGenerator {
 		}
 	}
 
+	/**
+	 * Request a new access token from the server. Opens a console input to
+	 * enter the authorization veryfier.
+	 * 
+	 * @return
+	 */
 	public Token requestAccessToken() {
 		if (accessToken != null) {
 			return accessToken;
@@ -64,6 +83,17 @@ public class AccessGenerator {
 		this.accessToken = token;
 	}
 
+	/**
+	 * Generates the AOuthService and access token based on a property file. If
+	 * the file does not exist, a new file is created based on the specified
+	 * file name. Automatically asks the user to enter necessary information
+	 * over the console.
+	 * 
+	 * @param fileName
+	 *            The file location of the property file
+	 * @return
+	 * @throws IOException
+	 */
 	public static AccessGenerator generateFromProperties(String fileName)
 			throws IOException {
 		AccessGenerator access;
