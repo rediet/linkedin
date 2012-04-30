@@ -2,13 +2,14 @@ package model;
 
 //test
 
+import java.io.BufferedReader;
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.Properties;
 import java.util.Scanner;
-
-import javax.management.AttributeNotFoundException;
 
 import org.scribe.builder.ServiceBuilder;
 import org.scribe.builder.api.LinkedInApi;
@@ -64,24 +65,39 @@ public class AccessGenerator {
 	}
 
 	public static AccessGenerator generateFromProperties(String fileName)
-			throws IOException, AttributeNotFoundException {
+			throws IOException {
 		AccessGenerator access;
 
 		String[] keys = new String[4];
 		Properties properties = new Properties();
 
-		properties.load(new FileInputStream(fileName));
-		keys[0] = properties.getProperty("API_KEY");
-		keys[1] = properties.getProperty("API_SECRET");
-		keys[2] = properties.getProperty("TOKEN");
-		keys[3] = properties.getProperty("TOKEN_SECRET");
+		File propertiesFile = new File(fileName);
 
-		if (keys[0] != null && keys[1] != null) {
-			access = new AccessGenerator(keys[0], keys[1]);
+		if (propertiesFile.exists()) {
+			properties.load(new FileInputStream(fileName));
+			keys[0] = properties.getProperty("API_KEY");
+			keys[1] = properties.getProperty("API_SECRET");
+			keys[2] = properties.getProperty("TOKEN");
+			keys[3] = properties.getProperty("TOKEN_SECRET");
 		} else {
-			throw new AttributeNotFoundException(
-					"Either API key or secret missing");
+			propertiesFile.createNewFile();
 		}
+
+		if (keys[0] == null) {
+			System.out.println("Please enter the API key:");
+			keys[0] = (new BufferedReader(new InputStreamReader(System.in)))
+					.readLine();
+			properties.setProperty("API_KEY", keys[0]);
+		}
+
+		if (keys[1] == null) {
+			System.out.println("Please enter the API secret:");
+			keys[1] = (new BufferedReader(new InputStreamReader(System.in)))
+					.readLine();
+			properties.setProperty("API_SECRET", keys[0]);
+		}
+
+		access = new AccessGenerator(keys[0], keys[1]);
 
 		if (keys[2] == null || keys[3] == null) {
 			Token token = access.requestAccessToken();

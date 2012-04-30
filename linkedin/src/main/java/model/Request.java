@@ -6,12 +6,12 @@ import org.scribe.model.Token;
 import org.scribe.model.Verb;
 import org.scribe.oauth.OAuthService;
 
-public class RESTRequester {
+public class Request {
 
 	Token accessToken;
 	OAuthService service;
 
-	public RESTRequester(OAuthService service, Token accessToken) {
+	public Request(OAuthService service, Token accessToken) {
 		this.service = service;
 		this.accessToken = accessToken;
 	}
