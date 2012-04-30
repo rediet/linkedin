@@ -13,6 +13,16 @@ import org.scribe.oauth.OAuthService;
  */
 public class Request {
 
+	public static final String API_PREAMBLE = "http://api.linkedin.com/v1/";
+	public static final String PROFILE = "people/";
+	public static final String PROFILE_SEARCH = "people-search?";
+	public static final String GROUPS = "groups/";
+	public static final String COMPANIES = "companies/";
+
+	public enum ApiType {
+		Profile, ProfileSearch, Group, Company
+	};
+
 	Token accessToken;
 	OAuthService service;
 
@@ -58,4 +68,25 @@ public class Request {
 		service.signRequest(accessToken, request);
 		return request.send();
 	}
+
+	public Response GET(String identifier, ApiType type) {
+		return GET(identifier, type, false);
+	}
+
+	public Response GET(String identifier, ApiType type, boolean JSON) {
+		switch (type) {
+		case Profile:
+			return GET(API_PREAMBLE + PROFILE + identifier, JSON);
+		case ProfileSearch:
+			return GET(API_PREAMBLE + PROFILE_SEARCH + identifier, JSON);
+		case Group:
+			return GET(API_PREAMBLE + GROUPS + identifier, JSON);
+		case Company:
+			return GET(API_PREAMBLE + COMPANIES + identifier, JSON);
+		default:
+			return null;
+		}
+
+	}
+
 }
