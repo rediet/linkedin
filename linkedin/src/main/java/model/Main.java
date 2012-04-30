@@ -2,15 +2,18 @@ package model;
 
 import java.io.File;
 import java.io.IOException;
-
+import org.jdom2.Element;
 import org.scribe.model.Response;
+
+import structure.INode;
+import structure.Node;
 
 public class Main {
 
 	public static void main(String[] args) {
 		AccessGenerator generator = null;
 
-		// Get access to the linkedin server
+		// Get access to the LinkedIn server
 		try {
 			generator = AccessGenerator.generateFromProperties(File.separator
 					+ "linkedin.properties");
@@ -24,8 +27,22 @@ public class Main {
 
 		// Do a request
 		Response response = requester.GET(
-				"http://api.linkedin.com/v1/people/id=mL8t-bd_We", true);
-		// "http://api.linkedin.com/v1/people-search?first-name=Pierre", true);
+		// "http://api.linkedin.com/v1/people/id=mL8t-bd_We");
+		// "http://api.linkedin.com/v1/people-search?first-name=Pierre");
+		// "http://api.linkedin.com/v1/groups/2218477");
+				"http://api.linkedin.com/v1/companies/1035");
+		System.out.println("Response successful: " + response.isSuccessful());
 		System.out.println(response.getBody());
+
+		attemptFromRemo(response);
+	}
+
+	public static void attemptFromRemo(Response resp) {
+		INode node = new Node(resp.getBody());
+		System.out.println("Is person: " + node.isPerson());
+		System.out.println("Request type: " + node.getRootElement().getName());
+		for (Element e : node.getElements()) {
+			System.out.println(e.toString());
+		}
 	}
 }
