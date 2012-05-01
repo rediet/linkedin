@@ -2,19 +2,14 @@ package model;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.Collection;
-
-import model.Request.ApiType;
 
 import org.jdom2.Element;
 import org.scribe.model.Response;
 
-import structure.ElementType;
-import structure.Elements;
-import structure.INode;
-import structure.Node;
-
 public class Main {
+
+	public static final String DANIELE = "scar4b1FXy";
+	public static final String REMO = "7fV1HdMLHo";
 
 	public static void main(String[] args) {
 		AccessGenerator generator = null;
@@ -31,31 +26,26 @@ public class Main {
 		Request requester = new Request(generator.getService(),
 				generator.getAccessToken());
 
-		// Do a request
-		/*
-		 * Response response = requester.GET( //
-		 * "http://api.linkedin.com/v1/people/id=mL8t-bd_We");
-		 * "http://api.linkedin.com/v1/people-search?first-name=Pierre"); //
-		 * "http://api.linkedin.com/v1/groups/2218477"); //
-		 * "http://api.linkedin.com/v1/companies/1035");
-		 */
-
-		Response response = requester.GET("first-name=Pierre",
-				ApiType.ProfileSearch);
-		System.out.println("Response successful: " + response.isSuccessful());
-		System.out.println(response.getBody());
-
-		attemptFromRemo(response);
+		attemptFromRemo(requester);
+		// exampleMethod()
 	}
 
-	public static void attemptFromRemo(Response resp) {
-		INode node = new Node(resp.getBody());
-		Collection<Element> elements = Elements.extract(node.getRootElement(),
-				ElementType.PERSON);
-		System.out.println("root element: "+node.getRootElement().getName());
-		System.out.println("extract persons:");
-		for (Element e : elements) {
-			System.out.println(e.toString());
+	public static void attemptFromRemo(Request requester) {
+		Crawler crawler = new Crawler(requester);
+		crawler.run();
+		for (Element e : crawler.getFirstDegreeConnections()) {
+			System.out.println("=========== PROFILE ===========");
+			System.out.println(e.getValue());
 		}
+	}
+
+	public static void exampleMethod(Request requester) {
+		// Do a request
+		Response response = requester
+				.GET("http://api.linkedin.com/v1/people/id=7fV1HdMLHo");
+		// "http://api.linkedin.com/v1/people-search?first-name=Remo");
+		// "http://api.linkedin.com/v1/groups/2218477");
+		// "http://api.linkedin.com/v1/companies/1035");
+		System.out.println(response.getBody());
 	}
 }

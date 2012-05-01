@@ -10,10 +10,6 @@ import org.jdom2.Element;
  */
 public class Elements {
 
-	public static boolean isKindOf(ElementType type, Element element) {
-		return type.hasSameTypeAs(element);
-	}
-
 	/**
 	 * Extracts all elements of the specified type and returns the result as a
 	 * Collection. Ignores sub-elements of an Element whose ElementType equals
@@ -37,7 +33,7 @@ public class Elements {
 			Collection<Element> collection) {
 		if (element == null) {
 			return;
-		} else if (isKindOf(type, element)) {
+		} else if (ElementType.isKindOf(type, element)) {
 			collection.add(element);
 			return;
 		} else {

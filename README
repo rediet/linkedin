@@ -3,3 +3,11 @@ LinkedIn sozial network analyzing tool to visualize network topology and informa
 Eclipse project: The project and its dependencies are built with apache maven
 http://maven.apache.org/
 http://maven.apache.org/guides/getting-started/maven-in-five-minutes.html
+
+
+
+Project issues:
+-----------------------------------------------------
+- Cannot access second degree profile connections like:
+     "v1/people/id=<2nd-deg-id>/connections"
+	 "v1/people/id=<2nd-deg-id>:(connections)"
