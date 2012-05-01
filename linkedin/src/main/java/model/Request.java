@@ -29,7 +29,6 @@ public class Request {
 	/**
 	 * Creates a Request service instance using the specified OAuthService and
 	 * access token.
-	 * 
 	 * @param service
 	 * @param accessToken
 	 */
@@ -40,9 +39,7 @@ public class Request {
 
 	/**
 	 * Sends an HTTP GET request to the server and returns the Response as XML.
-	 * 
-	 * @param url
-	 *            the HTTP request
+	 * @param url the HTTP request
 	 * @return the Response
 	 */
 	public Response GET(String url) {
@@ -52,11 +49,8 @@ public class Request {
 	/**
 	 * Sends an HTTP GET request to the server and returns the Response either
 	 * as XML or JSON.
-	 * 
-	 * @param url
-	 *            The HTTP request
-	 * @param JSON
-	 *            If true, the response format is a JSON object. If false the
+	 * @param url The HTTP request
+	 * @param JSON If true, the response format is a JSON object. If false the
 	 *            response format will be XML.
 	 * @return the Response
 	 */

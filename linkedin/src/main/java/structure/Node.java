@@ -9,10 +9,17 @@ import org.jdom2.Element;
 import org.jdom2.JDOMException;
 import org.jdom2.input.SAXBuilder;
 
+/**
+ * XML document wrapper for LinkedIn response body's
+ */
 public class Node implements INode {
 
 	private Document doc;
 
+	/**
+	 * Parses a String to an XML Document containing Elements
+	 * @param response
+	 */
 	public Node(String response) {
 		SAXBuilder builder = new SAXBuilder();
 		try {
@@ -31,18 +38,18 @@ public class Node implements INode {
 	}
 
 	@Override
-	public boolean isPerson() {
-		return Elements.isPerson(doc.getRootElement());
-	}
-
-	@Override
-	public Collection<Element> getElements() {
+	public Collection<Element> getChildren() {
 		return doc.getRootElement().getChildren();
 	}
 
 	@Override
 	public Element getRootElement() {
 		return doc.getRootElement();
+	}
+
+	@Override
+	public boolean isKindOf(ElementType type) {
+		return type.equals(doc.getRootElement().getName());
 	}
 
 }

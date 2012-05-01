@@ -6,9 +6,9 @@ import org.jdom2.Element;
 
 public interface INode {
 
-	public boolean isPerson();
-	
-	public Collection<Element> getElements();
-	
+	public boolean isKindOf(ElementType type);
+
+	public Collection<Element> getChildren();
+
 	public Element getRootElement();
 }

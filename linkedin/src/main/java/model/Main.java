@@ -2,12 +2,15 @@ package model;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Collection;
 
 import model.Request.ApiType;
 
 import org.jdom2.Element;
 import org.scribe.model.Response;
 
+import structure.ElementType;
+import structure.Elements;
 import structure.INode;
 import structure.Node;
 
@@ -47,10 +50,11 @@ public class Main {
 
 	public static void attemptFromRemo(Response resp) {
 		INode node = new Node(resp.getBody());
-		System.out.println("Is person: " + node.isPerson());
-		System.out.println("Response type: " + node.getRootElement().getName());
-		System.out.println("Contains:");
-		for (Element e : node.getElements()) {
+		Collection<Element> elements = Elements.extract(node.getRootElement(),
+				ElementType.PERSON);
+		System.out.println("root element: "+node.getRootElement().getName());
+		System.out.println("extract persons:");
+		for (Element e : elements) {
 			System.out.println(e.toString());
 		}
 	}
