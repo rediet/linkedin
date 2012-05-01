@@ -30,20 +30,28 @@ public class LInPerson implements LInNode {
 		return "private".equals(this.id);
 	}
 
-	// TODO: profile API can return id as 'private'
+	// TODO: profile API can return id as 'private' (id is not unique)
 	@Override
 	public boolean equals(Object obj) {
 		if (this == obj) // self-comparison
 			return true;
-		if (!(obj instanceof LInPerson))// class of instance
+		if (!(obj instanceof LInPerson))
 			return false;
+		LInPerson person = (LInPerson) obj;
 
-		return this.id.equals(((LInPerson) obj).getId());
+		if (this.id != null)
+			return this.id.equals(person.getId());
+		else
+			return this.id == person.getId();
+
 	}
 
 	@Override
 	public int hashCode() {
-		return this.id.hashCode();
+		if (this.id == null)
+			return 0;
+		else
+			return this.id.hashCode();
 	}
 
 	@Override
