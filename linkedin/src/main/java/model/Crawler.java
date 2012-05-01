@@ -1,37 +1,44 @@
 package model;
 
-import java.util.Collection;
+import java.util.List;
 
 import org.jdom2.Element;
 import org.scribe.model.Response;
 
 import structure.ElementType;
 import structure.Elements;
-import structure.ResponseNode;
+import structure.LInResponse;
 import model.Request.ApiType;
 
 public class Crawler {
 
 	private Request requester;
-	private Collection<Element> firstDegrees;
+	
+	public List<Element> firstDegrees;
+	public List<Element> firstDegreeUpdates;
 
 	public Crawler(Request requester) {
 		this.requester = requester;
 
 	}
 
-	public Collection<Element> getFirstDegreeConnections() {
-		return firstDegrees;
-	}
-
+	// METHODS
 	public void run() {
 		this.firstDegrees = firstDegreeConnections();
+		this.firstDegreeUpdates = firstDegreeConnectionUpdates();
 	}
 
-	private Collection<Element> firstDegreeConnections() {
-		Response response = requester.GET("~/connections", ApiType.Profile);
-		ResponseNode node = new ResponseNode(response);
+	// HELPERS
+	private List<Element> firstDegreeConnections() {
+		Response response = requester.GET("~/connections", ApiType.People);
+		LInResponse node = new LInResponse(response);
 		return Elements.extract(node.getRootElement(), ElementType.PERSON);
+	}
+
+	private List<Element> firstDegreeConnectionUpdates() {
+		Response response = requester.GET("~/network/updates", ApiType.People);
+		LInResponse node = new LInResponse(response);
+		return Elements.extract(node.getRootElement(), ElementType.UPDATE);
 	}
 
 }

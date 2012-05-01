@@ -12,7 +12,7 @@ import org.scribe.model.Response;
 /**
  * XML document wrapper for LinkedIn response body's
  */
-public class ResponseNode implements Node {
+public class LInResponse implements LInNode {
 
 	private Document doc;
 
@@ -20,7 +20,7 @@ public class ResponseNode implements Node {
 	 * Parses a String to an XML Document containing Elements
 	 * @param response
 	 */
-	public ResponseNode(String response) {
+	public LInResponse(String response) {
 		SAXBuilder builder = new SAXBuilder();
 		try {
 			doc = builder.build(new StringReader(response));
@@ -33,7 +33,7 @@ public class ResponseNode implements Node {
 		}
 	}
 	
-	public ResponseNode(Response response) {
+	public LInResponse(Response response) {
 		this(response.getBody());
 	}
 

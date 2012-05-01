@@ -16,9 +16,9 @@ import org.scribe.model.Verifier;
 import org.scribe.oauth.OAuthService;
 
 /**
- * The AccessGenerator class elaborates connection to an OAuth service and
+ * The AccessGenerator class elaborates a connection to an OAuth service and
  * builds the necessary OAuthService object to do API calls. It is also used to
- * obtain an access token to permit API access from the view of a particular
+ * obtain an access token to permit API calls from the view of a particular
  * user.
  */
 public class AccessGenerator {
@@ -56,8 +56,8 @@ public class AccessGenerator {
 
 	/**
 	 * Request a new access token from the server. Opens a console input to
-	 * enter the authorization veryfier.
-	 * @return
+	 * enter the authorization verifier from the provided source.
+	 * @return the access token
 	 */
 	public Token requestAccessToken() {
 		if (accessToken != null) {

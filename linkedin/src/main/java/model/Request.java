@@ -7,9 +7,9 @@ import org.scribe.model.Verb;
 import org.scribe.oauth.OAuthService;
 
 /**
- * The Request class parses an HTTP request string and returns a Response
- * containing either an XML or JSON representation of the server response. The
- * Request class
+ * The Request class provides methods to parse and execute HTTP requests and to
+ * return Response objects containing either an XML or JSON representation of
+ * the server response.
  */
 public class Request {
 
@@ -20,7 +20,7 @@ public class Request {
 	public static final String COMPANIES = "companies/";
 
 	public enum ApiType {
-		Profile, ProfileSearch, Group, Company
+		People, ProfileSearch, Group, Company
 	};
 
 	Token accessToken;
@@ -38,7 +38,8 @@ public class Request {
 	}
 
 	/**
-	 * Sends an HTTP GET request to the server and returns the Response as XML.
+	 * Sends an HTTP GET request to the server and returns the Response in XML
+	 * format.
 	 * @param url the HTTP request
 	 * @return the Response
 	 */
@@ -69,7 +70,7 @@ public class Request {
 
 	public Response GET(String identifier, ApiType type, boolean JSON) {
 		switch (type) {
-		case Profile:
+		case People:
 			return GET(API_PREAMBLE + PROFILE + identifier, JSON);
 		case ProfileSearch:
 			return GET(API_PREAMBLE + PROFILE_SEARCH + identifier, JSON);

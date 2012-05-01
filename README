@@ -5,9 +5,9 @@ http://maven.apache.org/
 http://maven.apache.org/guides/getting-started/maven-in-five-minutes.html
 
 
-
 Project issues:
 -----------------------------------------------------
 - Cannot access second degree profile connections like:
-     "v1/people/id=<2nd-deg-id>/connections"
-	 "v1/people/id=<2nd-deg-id>:(connections)"
+  "v1/people/id=<2nd-deg-id>/connections"
+  "v1/people/id=<2nd-deg-id>:(connections)"
+  -> You cannot "browse connections." That is, you can only get the connections of the user who granted your application access. You cannot get connections of that user's connections.

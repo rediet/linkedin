@@ -2,7 +2,7 @@ package structure;
 
 import org.jdom2.Element;
 
-public interface Node {
+public interface LInNode {
 
 	public boolean isKindOf(ElementType type);
 

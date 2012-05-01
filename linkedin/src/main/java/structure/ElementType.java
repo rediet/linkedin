@@ -3,11 +3,11 @@ package structure;
 import org.jdom2.Element;
 
 /**
- * Enum object that represents XML type-names of a LinkedIn request
+ * Enum structure that represents XML type-names of a LinkedIn request
  */
 public enum ElementType {
-	UNDEFINED("UNDEFINED"), PERSON("person"), GROUP("group"), COMPANY("company"), PEOPLE_SEARCH(
-			"people-search"), PEOPLE_COLLECTION("people");
+	UNDEFINED("UNDEFINED"), PERSON("person"), GROUP("group"), COMPANY("company"), UPDATE(
+			"update");
 
 	private final String name;
 
@@ -19,24 +19,24 @@ public enum ElementType {
 		return this.name;
 	}
 
-	public boolean hasSameTypeAs(Element e) {
+	public boolean typeEquals(Element e) {
 		return this.name.equals(e.getName());
 	}
 
-	public boolean hasSameTypeAs(String name) {
+	public boolean typeEquals(String name) {
 		return this.name.equals(name);
+	}
+
+	public static boolean isKindOf(ElementType type, Element element) {
+		return type.typeEquals(element);
 	}
 
 	public static ElementType getTypeOf(Element element) {
 		for (ElementType type : ElementType.values()) {
-			if (type.hasSameTypeAs(element))
+			if (type.typeEquals(element))
 				return type;
 		}
 
 		return UNDEFINED;
-	}
-
-	public static boolean isKindOf(ElementType type, Element element) {
-		return type.hasSameTypeAs(element);
 	}
 }
