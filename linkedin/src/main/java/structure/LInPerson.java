@@ -60,7 +60,7 @@ public class LInPerson implements LInNode {
 	}
 
 	@Override
-	public Element getRootElement() {
+	public Element getElement() {
 		return element;
 	}
 

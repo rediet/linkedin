@@ -8,5 +8,5 @@ public interface LInNode {
 
 	public ElementType getType();
 
-	public Element getRootElement();
+	public Element getElement();
 }
