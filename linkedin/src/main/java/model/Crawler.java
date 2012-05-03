@@ -7,15 +7,16 @@ import org.scribe.model.Response;
 
 import structure.ElementType;
 import structure.Elements;
-import structure.LInResponse;
 import model.Request.ApiType;
 
 public class Crawler {
 
 	private Request requester;
-	
+
 	public List<Element> firstDegrees;
 	public List<Element> firstDegreeUpdates;
+	public List<Element> groupMemberships;
+	public List<Element> companiesFollowing;
 
 	public Crawler(Request requester) {
 		this.requester = requester;
@@ -26,19 +27,35 @@ public class Crawler {
 	public void run() {
 		this.firstDegrees = firstDegreeConnections();
 		this.firstDegreeUpdates = firstDegreeConnectionUpdates();
+		this.groupMemberships = groupMemberships();
+		this.companiesFollowing = companiesFollowing();
 	}
 
 	// HELPERS
 	private List<Element> firstDegreeConnections() {
 		Response response = requester.GET("~/connections", ApiType.People);
-		LInResponse node = new LInResponse(response);
-		return Elements.extract(node.getRootElement(), ElementType.PERSON);
+		Element element = Elements.fromResponse(response);
+		return Elements.extract(element, ElementType.PERSON);
 	}
 
 	private List<Element> firstDegreeConnectionUpdates() {
 		Response response = requester.GET("~/network/updates", ApiType.People);
-		LInResponse node = new LInResponse(response);
-		return Elements.extract(node.getRootElement(), ElementType.UPDATE);
+		Element element = Elements.fromResponse(response);
+		return Elements.extractAll(element, ElementType.PERSON);
 	}
 
+	private List<Element> groupMemberships() {
+		Response response = requester
+				.GET("~/group-memberships:(group:(id,name,counts-by-category))?membership-state=member",
+						ApiType.People);
+		Element element = Elements.fromResponse(response);
+		return Elements.extract(element, ElementType.GROUP);
+	}
+
+	private List<Element> companiesFollowing() {
+		Response response = requester.GET("~/following/companies",
+				ApiType.People);
+		Element element = Elements.fromResponse(response);
+		return Elements.extract(element, ElementType.COMPANY);
+	}
 }

@@ -1,14 +1,46 @@
 package structure;
 
+import java.io.IOException;
+import java.io.StringReader;
 import java.util.LinkedList;
 import java.util.List;
 
+import org.jdom2.Document;
 import org.jdom2.Element;
+import org.jdom2.JDOMException;
+import org.jdom2.input.SAXBuilder;
+import org.scribe.model.Response;
 
 /**
- * Utility class to provide operations on (JDOM) XML Elements
+ * Utility class to provide operations on and to (JDOM) XML Elements
  */
 public class Elements {
+
+	/**
+	 * Parses an OAuht Response body to a JDOM Document and returns its root
+	 * Element
+	 * @param response the OAuth Response object
+	 * @return the root element
+	 */
+	public static Element fromResponse(Response response) {
+		return fromResponse(response.getBody());
+	}
+
+	/**
+	 * Parses an OAuth Response body to a JDOM Document and returns its root
+	 * Element
+	 * @param body the OAuth Response body as string
+	 * @return the root element
+	 */
+	public static Element fromResponse(String body) {
+		try {
+			Document doc = (new SAXBuilder()).build(new StringReader(body));
+			return doc.getRootElement();
+		} catch (JDOMException | IOException e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
 
 	/**
 	 * Extracts top occurrences of the specified ElementType within the XML

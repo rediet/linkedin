@@ -72,7 +72,6 @@ public class Main {
 		for (LInPerson n : hashSet) {
 			System.out.println(n.getId());
 		}
-
 	}
 
 	public static void exampleMethod(Request requester) {

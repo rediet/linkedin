@@ -6,8 +6,7 @@ import org.jdom2.Element;
  * Enum structure that represents XML type-names of a LinkedIn request
  */
 public enum ElementType {
-	UNDEFINED("UNDEFINED"), PERSON("person"), GROUP("group"), COMPANY("company"), UPDATE(
-			"update");
+	OTHER("OTHER"), PERSON("person"), GROUP("group"), COMPANY("company");
 
 	private final String name;
 
@@ -37,6 +36,6 @@ public enum ElementType {
 				return type;
 		}
 
-		return UNDEFINED;
+		return OTHER;
 	}
 }
