@@ -69,6 +69,9 @@ public class Elements {
 		return subElements;
 	}
 
+	
+	// HELPERS -----------------------------------------------------------------
+	
 	/**
 	 * Recursive lookup function to extract top occurrences of elements of the
 	 * specified ElementType

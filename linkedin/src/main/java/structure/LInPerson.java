@@ -19,7 +19,11 @@ public class LInPerson implements LInNode {
 		}
 
 		this.element = element;
-		this.id = element.getChildText("id");
+		this.id = element.getChildText("id"); // can be null
+	}
+
+	public String getDistance() {
+		return this.element.getChildText("distance");
 	}
 
 	public String getId() {
@@ -68,5 +72,4 @@ public class LInPerson implements LInNode {
 	public ElementType getType() {
 		return ELEMENT_TYPE;
 	}
-
 }

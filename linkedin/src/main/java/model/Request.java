@@ -20,7 +20,7 @@ public class Request {
 	public static final String COMPANIES = "companies/";
 
 	public enum ApiType {
-		People, PeopleSearch, Group, Company
+		People, PeopleSearch, Group, Company, Preamble
 	};
 
 	Token accessToken;
@@ -78,6 +78,8 @@ public class Request {
 			return GET(API_PREAMBLE + GROUPS + identifier, JSON);
 		case Company:
 			return GET(API_PREAMBLE + COMPANIES + identifier, JSON);
+		case Preamble:
+			return GET(API_PREAMBLE + identifier, JSON);
 		default:
 			return null;
 		}
