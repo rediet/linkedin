@@ -1,6 +1,5 @@
 package structure;
 
-import org.jdom2.Element;
 
 public interface LInNode {
 
@@ -8,5 +7,4 @@ public interface LInNode {
 
 	public ElementType getType();
 
-	public Element getElement();
 }

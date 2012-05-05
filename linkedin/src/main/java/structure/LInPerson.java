@@ -5,7 +5,9 @@ import org.jdom2.Element;
 /**
  * Wrapper for (JDOM) XML Elements of the type Person. Provides access to fields
  * like id and implements equality checks for persons.
+ * @deprecated use Element subclass PersonElement instead
  */
+@Deprecated
 public class LInPerson implements LInNode {
 
 	private static final ElementType ELEMENT_TYPE = ElementType.PERSON;
@@ -63,7 +65,6 @@ public class LInPerson implements LInNode {
 		return ELEMENT_TYPE.equals(type);
 	}
 
-	@Override
 	public Element getElement() {
 		return element;
 	}
