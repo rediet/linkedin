@@ -8,27 +8,42 @@ import org.scribe.model.Response;
 
 import structure.ElementType;
 import structure.Elements;
-import structure.PersonElement;
+import structure.LInCompany;
+import structure.LInGroup;
+import structure.LInPerson;
 import model.Request.ApiType;
 
 public class Crawler {
 
-	// query parameters that can be specified:
-	// keywords=[space delimited keywords]& first-name=[first name]&
-	// last-name=[last name]& company-name=[company name]&
-	// current-company=[true|false]& title=[title]& current-title=[true|false]&
-	// school-name=[school name]& current-school=[true|false]&
-	// country-code=[country code]& postal-code=[postal code]& distance=[miles]&
-	// start=[number]& count=[1-25]& facet=[facet code, values]& facets=[facet
-	// codes]& sort=[connections|recommenders|distance|relevance]";
+	/* Query parameters that can be specified: */
+	// keywords=[space delimited keywords]
+	// first-name=[first name]
+	// last-name=[last name]
+	// company-name=[company name]
+	// current-company=[true|false]
+	// title=[title]
+	// current-title=[true|false]
+	// school-name=[school name]
+	// current-school=[true|false]
+	// country-code=[country code]
+	// postal-code=[postal code]
+	// distance=[miles]
+	// facet=[facet code, values]
+	// facets=[facet codes]
+	// ---- ALREADY USED: ---
+	// start=[number]
+	// count=[1-25]
+	// sort=[connections|recommenders|distance|relevance]
+
+	public static final String PERSON_FIELDS = "(id,first-name,last-name,distance,three-current-positions,three-past-positions,location:(country:(code)))";
+	public static final String COMPANY_FIELDS = "(id,name,universal-name,num-followers)";
+	public static final String GROUP_FIELDS = "(group:(id,name,num-members,location:(country,postal-code)))";
+
+	public List<LInPerson> personDatabase;
+	public List<LInGroup> groupMemberships;
+	public List<LInCompany> companiesFollowing;
 
 	private Request requester;
-
-	public List<PersonElement> firstDegrees;
-	public List<PersonElement> firstDegreeUpdates;
-	public List<Element> groupMemberships;
-	public List<Element> companiesFollowing;
-	public List<PersonElement> peopleSearch;
 
 	public Crawler(Request requester) {
 		this.requester = requester;
@@ -36,64 +51,73 @@ public class Crawler {
 	}
 
 	public void run() {
-		this.firstDegrees = firstDegreeConnections();
-		this.firstDegreeUpdates = firstDegreeConnectionUpdates();
+		// this.personDatabase = getFirstDegreeConnections();
+		// this.personDatabase.addAll(getNetworkUpdates());
+		// this.personDatabase.addAll(searchPeople());
+		//
+		// // HashSet removes duplicates
+		// for (LInPerson e : new HashSet<LInPerson>(personDatabase)) {
+		// System.out.println(e.getId());
+		// }
 
-		// this is useful for a keyboard search or company-search
-		this.groupMemberships = groupMemberships();
-		this.companiesFollowing = companiesFollowing();
+		// this.groupMemberships = getGroupMemberships();
+		// for (LInGroup g : this.groupMemberships) {
+		// System.out.println(g);
+		// }
 
-		// network members (1st,2nd and Group members)
-		this.peopleSearch = peopleSearch("keywords=microsoft");
-		this.peopleSearch = peopleSearch();
+		this.companiesFollowing = getCompaniesFollowing();
+		// for (LInCompany c : this.companiesFollowing) {
+		// System.out.println(c);
+		// }
+
+		for (LInCompany c : this.companiesFollowing) {
+			searchPeople(0, 25, "company=" + c.getName());
+			// ,"current-company=true");
+		}
 	}
 
-	// HELPERS
-	public List<PersonElement> firstDegreeConnections() {
-		Response response = requester.GET("~/connections:(id,distance)",
+	// CRAWLERS ----------------------------------------------------------------
+
+	public List<LInPerson> getFirstDegreeConnections() {
+		Response response = requester.GET("~/connections:" + PERSON_FIELDS,
 				ApiType.People);
 		Element element = Elements.fromResponse(response);
 		return convertPerson(Elements.extract(element, ElementType.PERSON));
 	}
 
-	public List<PersonElement> firstDegreeConnectionUpdates() {
+	// TODO: Updates have a big range of different types
+	public List<LInPerson> getNetworkUpdates() {
 		Response response = requester.GET("~/network/updates", ApiType.People);
 		Element element = Elements.fromResponse(response);
 		return convertPerson(Elements.extractAll(element, ElementType.PERSON));
 	}
 
-	public List<Element> groupMemberships() {
-		Response response = requester
-				.GET("~/group-memberships", ApiType.People);
-		Element element = Elements.fromResponse(response);
-		System.out.println(response.getBody());
-		return Elements.extract(element, ElementType.GROUP);
-	}
-
-	public List<Element> groupInformation(String... groupIDs) {
-		List<Element> list = new LinkedList<Element>();
-		Response response;
-		for (String id : groupIDs) {
-			response = requester.GET(id + "", ApiType.Group);
-			list.add(Elements.fromResponse(response));
-		}
-		return list;
-	}
-
-	public List<Element> companiesFollowing() {
+	public List<LInGroup> getGroupMemberships() {
 		Response response = requester.GET(
-				"~/following/companies:(id,name,universal-name)",
-				ApiType.People);
+				"~/group-memberships:" + GROUP_FIELDS, ApiType.People);
 		Element element = Elements.fromResponse(response);
-		return Elements.extract(element, ElementType.COMPANY);
+		return convertGroup(Elements.extract(element, ElementType.GROUP));
 	}
 
-	public static final int MAX_COUNT = 25; // number of a search results
+	public List<LInCompany> getCompaniesFollowing() {
+		Response response = requester.GET("~/following/companies:"
+				+ COMPANY_FIELDS, ApiType.People);
+		Element element = Elements.fromResponse(response);
+		return convertCompany(Elements.extract(element, ElementType.COMPANY));
+	}
 
-	public List<PersonElement> peopleSearch(String... keywords) {
+	/**
+	 * Performs a people search using the given keywords. Returns all pages
+	 * available (one page = max 25 elements). Note that each page is on API
+	 * call.
+	 * 
+	 * @param keywords
+	 * @return
+	 */
+	public List<LInPerson> searchPeople(String... keywords) {
 		int start = 0;
 		// do a first request
-		Element result = peopleSearch(start, MAX_COUNT, keywords);
+		Element result = searchPeople(start, MAX_COUNT, keywords);
 		List<Element> personList = Elements.extract(result, ElementType.PERSON);
 		int total, count;
 		try { // search through further pages
@@ -103,40 +127,74 @@ public class Crawler {
 					.getIntValue();
 			start = count;
 			while (start < total) {
-				result = peopleSearch(start, count, keywords);
+				result = searchPeople(start, count, keywords);
 				personList.addAll(Elements.extract(result, ElementType.PERSON));
 				start += count;
 			}
 		} catch (Exception exception) {
 			exception.printStackTrace();
 		}
-		System.out.println(personList.size());
 		return convertPerson(personList);
 	}
 
-	private Element peopleSearch(int start, int count,
+	private static final int MAX_COUNT = 25; // number of a search results
+
+	// HELPERS ----------------------------------------------------------------
+
+	/**
+	 * Single page people search.
+	 * 
+	 * @param start
+	 *            start index
+	 * @param count
+	 *            number of elements to return (API limit: 25)
+	 * @param queryParameters
+	 *            additional query parameters
+	 * @return an Element representing the XML search result
+	 */
+	private Element searchPeople(int start, int count,
 			String... queryParameters) {
 		StringBuffer query = new StringBuffer();
-		query.append("people-search:(people:(id,first-name,last-name,distance),num-results)?");
+		query.append("people-search:(people:" + PERSON_FIELDS
+				+ ",num-results)?");
 		// query.append("people-search:(facets:(code,buckets:(code,name)))?facets=location");
 		// //seems not to work
+
 		query.append("start=").append(start);
 		query.append("&count=").append(count);
-		query.append("&sort=distance");
 		for (String parameter : queryParameters) {
 			query.append("&").append(parameter);
 		}
-		System.out.println(query.toString());
+		query.append("&sort=distance");
+
 		Response response = requester.GET(query.toString(), ApiType.Preamble);
 		System.out.println(response.getBody());
 		return Elements.fromResponse(response);
 	}
 
-	private List<PersonElement> convertPerson(List<Element> list) {
-		List<PersonElement> persons = new LinkedList<PersonElement>();
+	// PARSERS ----------------------------------------------------------------
+
+	private List<LInPerson> convertPerson(List<Element> list) {
+		List<LInPerson> persons = new LinkedList<LInPerson>();
 		for (Element e : list) {
-			persons.add(new PersonElement(e));
+			persons.add(new LInPerson(e));
 		}
 		return persons;
+	}
+
+	private List<LInCompany> convertCompany(List<Element> list) {
+		List<LInCompany> companies = new LinkedList<LInCompany>();
+		for (Element e : list) {
+			companies.add(new LInCompany(e));
+		}
+		return companies;
+	}
+
+	private List<LInGroup> convertGroup(List<Element> list) {
+		List<LInGroup> groups = new LinkedList<LInGroup>();
+		for (Element e : list) {
+			groups.add(new LInGroup(e));
+		}
+		return groups;
 	}
 }

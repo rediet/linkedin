@@ -29,6 +29,7 @@ public class Request {
 	/**
 	 * Creates a Request service instance using the specified OAuthService and
 	 * access token.
+	 * 
 	 * @param service
 	 * @param accessToken
 	 */
@@ -40,7 +41,9 @@ public class Request {
 	/**
 	 * Sends an HTTP GET request to the server and returns the Response in XML
 	 * format.
-	 * @param url the HTTP request
+	 * 
+	 * @param url
+	 *            the HTTP request
 	 * @return the Response
 	 */
 	public Response GET(String url) {
@@ -50,8 +53,11 @@ public class Request {
 	/**
 	 * Sends an HTTP GET request to the server and returns the Response either
 	 * as XML or JSON.
-	 * @param url The HTTP request
-	 * @param JSON If true, the response format is a JSON object. If false the
+	 * 
+	 * @param url
+	 *            The HTTP request
+	 * @param JSON
+	 *            If true, the response format is a JSON object. If false the
 	 *            response format will be XML.
 	 * @return the Response
 	 */
@@ -70,18 +76,18 @@ public class Request {
 
 	public Response GET(String identifier, ApiType type, boolean JSON) {
 		switch (type) {
-		case People:
-			return GET(API_PREAMBLE + PEOPLE + identifier, JSON);
-		case PeopleSearch:
-			return GET(API_PREAMBLE + PEOPLE_SEARCH + identifier, JSON);
-		case Group:
-			return GET(API_PREAMBLE + GROUPS + identifier, JSON);
-		case Company:
-			return GET(API_PREAMBLE + COMPANIES + identifier, JSON);
-		case Preamble:
-			return GET(API_PREAMBLE + identifier, JSON);
-		default:
-			return null;
+			case People :
+				return GET(API_PREAMBLE + PEOPLE + identifier, JSON);
+			case PeopleSearch :
+				return GET(API_PREAMBLE + PEOPLE_SEARCH + identifier, JSON);
+			case Group :
+				return GET(API_PREAMBLE + GROUPS + identifier, JSON);
+			case Company :
+				return GET(API_PREAMBLE + COMPANIES + identifier, JSON);
+			case Preamble :
+				return GET(API_PREAMBLE + identifier, JSON);
+			default :
+				return null;
 		}
 
 	}

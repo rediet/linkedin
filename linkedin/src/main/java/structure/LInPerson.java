@@ -5,38 +5,24 @@ import org.jdom2.Element;
 /**
  * Wrapper for (JDOM) XML Elements of the type Person. Provides access to fields
  * like id and implements equality checks for persons.
- * @deprecated use Element subclass PersonElement instead
  */
-@Deprecated
-public class LInPerson implements LInNode {
+public class LInPerson extends LInAbstractNode {
 
-	private static final ElementType ELEMENT_TYPE = ElementType.PERSON;
-
-	private Element element;
-	private String id;
+	public static ElementType TYPE = ElementType.PERSON;
 
 	public LInPerson(Element element) {
-		if (!ElementType.isKindOf(ELEMENT_TYPE, element)) {
-			throw (new IllegalArgumentException("ElementType missmatch"));
-		}
-
-		this.element = element;
-		this.id = element.getChildText("id"); // can be null
+		super(element, TYPE);
 	}
-
+	
 	public String getDistance() {
 		return this.element.getChildText("distance");
-	}
-
-	public String getId() {
-		return this.id;
 	}
 
 	public boolean isPrivate() {
 		return "private".equals(this.id);
 	}
 
-	// TODO: profile API can return id as 'private' (id is not unique)
+	// Note: the profile API can return id as 'private' (id is not unique)
 	@Override
 	public boolean equals(Object obj) {
 		if (this == obj) // self-comparison
@@ -58,19 +44,5 @@ public class LInPerson implements LInNode {
 			return 0;
 		else
 			return this.id.hashCode();
-	}
-
-	@Override
-	public boolean isKindOf(ElementType type) {
-		return ELEMENT_TYPE.equals(type);
-	}
-
-	public Element getElement() {
-		return element;
-	}
-
-	@Override
-	public ElementType getType() {
-		return ELEMENT_TYPE;
 	}
 }

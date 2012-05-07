@@ -19,7 +19,9 @@ public class Elements {
 	/**
 	 * Parses an OAuht Response body to a JDOM Document and returns its root
 	 * Element
-	 * @param response the OAuth Response object
+	 * 
+	 * @param response
+	 *            the OAuth Response object
 	 * @return the root element
 	 */
 	public static Element fromResponse(Response response) {
@@ -29,7 +31,9 @@ public class Elements {
 	/**
 	 * Parses an OAuth Response body to a JDOM Document and returns its root
 	 * Element
-	 * @param body the OAuth Response body as string
+	 * 
+	 * @param body
+	 *            the OAuth Response body as string
 	 * @return the root element
 	 */
 	public static Element fromResponse(String body) {
@@ -46,8 +50,11 @@ public class Elements {
 	 * Extracts top occurrences of the specified ElementType within the XML
 	 * tree-structure and returns the result as a List. Ignores nested elements
 	 * of the same ElementType within an occurrence.
-	 * @param element the root element
-	 * @param subType the ElementType of the elements that should be extracted
+	 * 
+	 * @param element
+	 *            the root element
+	 * @param subType
+	 *            the ElementType of the elements that should be extracted
 	 * @return a List containing the top occurrences of the specified type.
 	 */
 	public static List<Element> extract(Element element, ElementType subType) {
@@ -59,8 +66,11 @@ public class Elements {
 	/**
 	 * Extracts all occurrences of the specified ElementType within the XML
 	 * tree-structure and returns the result as a List.
-	 * @param element the root element
-	 * @param subType the ElementType of the elements that should be extracted
+	 * 
+	 * @param element
+	 *            the root element
+	 * @param subType
+	 *            the ElementType of the elements that should be extracted
 	 * @return a List containing all occurrences of the specified type.
 	 */
 	public static List<Element> extractAll(Element element, ElementType subType) {
@@ -69,9 +79,8 @@ public class Elements {
 		return subElements;
 	}
 
-	
 	// HELPERS -----------------------------------------------------------------
-	
+
 	/**
 	 * Recursive lookup function to extract top occurrences of elements of the
 	 * specified ElementType

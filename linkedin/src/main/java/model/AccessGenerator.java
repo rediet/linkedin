@@ -29,8 +29,11 @@ public class AccessGenerator {
 	/**
 	 * Creates a new AccessGenerator instance and builds an initial service
 	 * based on the API key and secret without requesting an access token.
-	 * @param apiKey The API key
-	 * @param apiSecret The API secret
+	 * 
+	 * @param apiKey
+	 *            The API key
+	 * @param apiSecret
+	 *            The API secret
 	 */
 	public AccessGenerator(String apiKey, String apiSecret) {
 		service = new ServiceBuilder().provider(LinkedInApi.class)
@@ -57,6 +60,7 @@ public class AccessGenerator {
 	/**
 	 * Request a new access token from the server. Opens a console input to
 	 * enter the authorization verifier from the provided source.
+	 * 
 	 * @return the access token
 	 */
 	public Token requestAccessToken() {
@@ -84,7 +88,9 @@ public class AccessGenerator {
 	 * the file does not exist, a new file is created based on the specified
 	 * file name. Automatically asks the user to enter necessary information
 	 * over the console.
-	 * @param fileName The file location of the property file
+	 * 
+	 * @param fileName
+	 *            The file location of the property file
 	 * @return
 	 * @throws IOException
 	 */
