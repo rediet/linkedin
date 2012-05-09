@@ -1,5 +1,7 @@
 package model;
 
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -160,14 +162,21 @@ public class Crawler {
 		// query.append("people-search:(facets:(code,buckets:(code,name)))?facets=location");
 		// //seems not to work
 
+		for (String parameter : queryParameters) {
+			try {
+				query.append(new URI(parameter).toString());
+				query.append("&");
+			} catch (URISyntaxException e) {
+				System.err.println("invalid syntax: \"" + parameter + "\"");
+			}
+		}
+
 		query.append("start=").append(start);
 		query.append("&count=").append(count);
-		for (String parameter : queryParameters) {
-			query.append("&").append(parameter);
-		}
 		query.append("&sort=distance");
 
 		Response response = requester.GET(query.toString(), ApiType.Preamble);
+		System.out.println(query.toString());
 		System.out.println(response.getBody());
 		return Elements.fromResponse(response);
 	}
