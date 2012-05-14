@@ -71,7 +71,7 @@ public class BasicGraphCreation {
         vv.getRenderContext().setEdgeLabelTransformer(new ToStringLabeller());
         vv.getRenderer().getVertexLabelRenderer().setPosition(Position.CNTR);        
         
-        JFrame frame = new JFrame("Simple Graph View 2");
+        JFrame frame = new JFrame("Simple Graph View Two");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.getContentPane().add(vv);
         frame.pack();
