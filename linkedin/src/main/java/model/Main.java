@@ -3,9 +3,7 @@ package model;
 import java.io.File;
 import java.io.IOException;
 
-import model.Request.ApiType;
-
-import org.scribe.model.Response;
+import structure.LInPerson;
 
 public class Main {
 
@@ -27,29 +25,13 @@ public class Main {
 		Request requester = new Request(generator.getService(),
 				generator.getAccessToken());
 
-		attemptFromRemo(requester);
-		// exampleMethod(requester);
+		crawlNetwork(requester);
 	}
 
-	public static void attemptFromRemo(Request requester) {
-		Crawler crawler = new Crawler(requester);
-		crawler.run();
-	}
-
-	public static void exampleMethod(Request requester) {
-		// Do a request
-		Response response;
-		// response =
-		// requester.GET("http://api.linkedin.com/v1/people/id=7fV1HdMLHo");
-		// response =
-		// requester.GET("http://api.linkedin.com/v1/people-search?first-name=Remo");
-		// response =
-		// requester.GET("http://api.linkedin.com/v1/groups/2218477");
-		// response =
-		// requester.GET("http://api.linkedin.com/v1/companies/1035");
-		// response = requester.GET("~/network/updates",ApiType.People);
-		response = requester
-				.GET("~/network/updates?scope=self", ApiType.People);
-		System.out.println(response.getBody());
+	public static void crawlNetwork(Request requester) {
+		PeopleCrawler crawler = new PeopleCrawler(requester);
+		for (LInPerson p : crawler.getSharedConnections("Rv7HgPO5ou")) {
+			System.out.println(p.getElement().getValue());
+		}
 	}
 }

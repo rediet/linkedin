@@ -19,10 +19,6 @@ public class Request {
 	public static final String GROUPS = "groups/";
 	public static final String COMPANIES = "companies/";
 
-	public enum ApiType {
-		People, PeopleSearch, Group, Company, Preamble
-	};
-
 	Token accessToken;
 	OAuthService service;
 
@@ -62,6 +58,10 @@ public class Request {
 	 * @return the Response
 	 */
 	public Response GET(String url, boolean JSON) {
+		if (!url.startsWith(API_PREAMBLE)) {
+			url = API_PREAMBLE + url;
+		}
+
 		OAuthRequest request = new OAuthRequest(Verb.GET, url);
 		if (JSON) {
 			request.addHeader("x-li-format", "json");
@@ -69,27 +69,4 @@ public class Request {
 		service.signRequest(accessToken, request);
 		return request.send();
 	}
-
-	public Response GET(String identifier, ApiType type) {
-		return GET(identifier, type, false);
-	}
-
-	public Response GET(String identifier, ApiType type, boolean JSON) {
-		switch (type) {
-			case People :
-				return GET(API_PREAMBLE + PEOPLE + identifier, JSON);
-			case PeopleSearch :
-				return GET(API_PREAMBLE + PEOPLE_SEARCH + identifier, JSON);
-			case Group :
-				return GET(API_PREAMBLE + GROUPS + identifier, JSON);
-			case Company :
-				return GET(API_PREAMBLE + COMPANIES + identifier, JSON);
-			case Preamble :
-				return GET(API_PREAMBLE + identifier, JSON);
-			default :
-				return null;
-		}
-
-	}
-
 }
