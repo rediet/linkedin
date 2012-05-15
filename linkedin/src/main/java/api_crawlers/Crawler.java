@@ -1,7 +1,9 @@
-package model;
+package api_crawlers;
 
 import java.util.LinkedList;
 import java.util.List;
+
+import model.Request;
 
 import org.jdom2.Element;
 import structure.LInCompany;

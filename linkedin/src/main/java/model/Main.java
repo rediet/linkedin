@@ -5,6 +5,10 @@ import java.io.IOException;
 
 import structure.LInPerson;
 
+import api_crawlers.Connection;
+import api_crawlers.GraphBuilder;
+import api_crawlers.PeopleCrawler;
+
 public class Main {
 
 	public static final String DANIELE = "scar4b1FXy";
@@ -30,8 +34,14 @@ public class Main {
 
 	public static void crawlNetwork(Request requester) {
 		PeopleCrawler crawler = new PeopleCrawler(requester);
-		for (LInPerson p : crawler.getSharedConnections("Rv7HgPO5ou")) {
-			System.out.println(p.getElement().getValue());
+		LInPerson self = crawler.getOwnProfile();
+		GraphBuilder graph = new GraphBuilder(self);
+
+		graph.addFirstDegree(crawler.getFirstDegreeConnections());
+		// graph.addShared(connection, shared)
+
+		for (Connection c : graph.getConnections()) {
+			System.out.println(c);
 		}
 	}
 }

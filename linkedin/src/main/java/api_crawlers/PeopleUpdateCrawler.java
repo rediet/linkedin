@@ -1,6 +1,8 @@
-package model;
+package api_crawlers;
 
 import java.util.List;
+
+import model.Request;
 
 import org.jdom2.Element;
 import org.scribe.model.Response;

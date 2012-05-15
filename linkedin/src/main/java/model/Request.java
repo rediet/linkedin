@@ -14,10 +14,6 @@ import org.scribe.oauth.OAuthService;
 public class Request {
 
 	public static final String API_PREAMBLE = "http://api.linkedin.com/v1/";
-	public static final String PEOPLE = "people/";
-	public static final String PEOPLE_SEARCH = "people-search?";
-	public static final String GROUPS = "groups/";
-	public static final String COMPANIES = "companies/";
 
 	Token accessToken;
 	OAuthService service;

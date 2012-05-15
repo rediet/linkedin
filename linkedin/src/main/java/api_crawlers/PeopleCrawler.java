@@ -1,8 +1,10 @@
-package model;
+package api_crawlers;
 
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.List;
+
+import model.Request;
 
 import org.jdom2.Element;
 import org.scribe.model.Response;
@@ -17,7 +19,7 @@ public class PeopleCrawler extends Crawler {
 	// relation-to-viewer:(distance,related-connections)
 
 	/*
-	 * PEOPLE-API ----------------------------------
+	 * PEOPLE-API ------------------------------ THROTTLE LIMIT: 200
 	 * http://api.linkedin.com/v1/people/~
 	 * http://api.linkedin.com/v1/people/id=abcdefg
 	 * http://api.linkedin.com/v1/people/url=<public-profile-url>
@@ -26,7 +28,7 @@ public class PeopleCrawler extends Crawler {
 	public static final int MAX_PEOPLE_PAGE_SIZE = 25;
 
 	/*
-	 * CONNECTIONS-API -----------------------------
+	 * CONNECTIONS-API ------------------------- THROTTLE LIMIT: 20k
 	 * http://api.linkedin.com/v1/people/~/connections
 	 * http://api.linkedin.com/v1/people/id=12345/connections
 	 * http://api.linkedin.com/v1/people/url=<public-profile-url>/connections
@@ -38,6 +40,19 @@ public class PeopleCrawler extends Crawler {
 		super(requester);
 	}
 
+	/**
+	 * Gets the full-detail profile of the current user.
+	 */
+	public LInPerson getOwnProfile() {
+		Response response = requester.GET("people/~:" + PERSON_FIELDS);
+		Element element = Elements.fromResponse(response);
+		return new LInPerson(element);
+	}
+
+	/**
+	 * Gets the full-detail profile of all people in the current user's network.
+	 * (does not allow relation-to-viewer).
+	 */
 	public List<LInPerson> getFirstDegreeConnections() {
 		Response response = requester.GET("people/~/connections:"
 				+ PERSON_FIELDS);
@@ -45,21 +60,29 @@ public class PeopleCrawler extends Crawler {
 		return convertPerson(Elements.extract(element, ElementType.PERSON));
 	}
 
+	/**
+	 * Gets the mini-profile of all shared connections with a particular user.
+	 * 
+	 * @param userId
+	 * @return
+	 */
 	public List<LInPerson> getSharedConnections(String userId) {
 		Response response = requester.GET("people/" + userId
-				+ "/relation-to-viewer:(num-results)?count="
-				+ MAX_PEOPLE_PAGE_SIZE);
+				+ "/relation-to-viewer?count=" + MAX_PEOPLE_PAGE_SIZE);
 		Element element = Elements.fromResponse(response);
-		System.out.println(response.getBody());
 		return convertPerson(Elements.extract(element, ElementType.PERSON));
 	}
 
 	/**
-	 * Performs a people search using the given queryParameters. Returns all
-	 * pages available. Note that each page is one API call (one page = max 25
-	 * elements)
+	 * Performs a people search using the given queryParameters. Searches
+	 * through all pages available. By default, if no parameters are specified,
+	 * the result will contain a list of all people in the member's network.
+	 * Note that each page is one API call (one page = max 25 elements)
 	 * 
 	 * @param queryParameters
+	 *            a specification of additional query parameters that can be of
+	 *            the following type:
+	 *            <p>
 	 *            keywords=[space delimited keywords], first-name=[first name],
 	 *            last-name=[last name], company-name=[company name],
 	 *            current-company=[true|false], title=[title],
@@ -67,6 +90,7 @@ public class PeopleCrawler extends Crawler {
 	 *            current-school=[true|false], country-code=[country code],
 	 *            postal-code=[postal code], distance=[miles], facet=[facet
 	 *            code, values], facets=[facet codes]
+	 *            </p>
 	 * @return a list of LInPerson nodes containing all the people that match
 	 *         the query parameters
 	 */
@@ -94,8 +118,7 @@ public class PeopleCrawler extends Crawler {
 		return convertPerson(personList);
 	}
 
-	private Element searchPeople(int start, int count,
-			String... queryParameters) {
+	public Element searchPeople(int start, int count, String... queryParameters) {
 		StringBuffer query = new StringBuffer();
 		query.append("people-search:(people:" + PERSON_FIELDS
 				+ ",num-results)?");
