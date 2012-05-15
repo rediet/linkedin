@@ -15,8 +15,8 @@ import structure.LInPerson;
 
 public class PeopleCrawler extends Crawler {
 
-	public static final String PERSON_FIELDS = "(id,first-name,last-name,distance,three-current-positions,three-past-positions,location:(country:(code)))";
-	// relation-to-viewer:(distance,related-connections)
+	public static final String PERSON_FIELDS = "(id,first-name,last-name,distance)";
+	// "(id,first-name,last-name,distance,three-current-positions,three-past-positions,location:(country:(code)))";
 
 	/*
 	 * PEOPLE-API ------------------------------ THROTTLE LIMIT: 200
@@ -70,14 +70,17 @@ public class PeopleCrawler extends Crawler {
 		Response response = requester.GET("people/" + userId
 				+ "/relation-to-viewer?count=" + MAX_PEOPLE_PAGE_SIZE);
 		Element element = Elements.fromResponse(response);
+		System.out.println(response.getBody());
 		return convertPerson(Elements.extract(element, ElementType.PERSON));
 	}
 
 	/**
-	 * Performs a people search using the given queryParameters. Searches
-	 * through all pages available. By default, if no parameters are specified,
-	 * the result will contain a list of all people in the member's network.
-	 * Note that each page is one API call (one page = max 25 elements)
+	 * Performs a people search using the specified, optional queryParameters.
+	 * Searches through all pages available. By default, if no keywords (see
+	 * below) are specified, the result will contain a list of all people in the
+	 * member's network. Therefore to search for people outside the user's
+	 * network, a keyword has to be specified. Note that each page is one API
+	 * call (one page = max 25 elements).
 	 * 
 	 * @param queryParameters
 	 *            a specification of additional query parameters that can be of
@@ -113,19 +116,20 @@ public class PeopleCrawler extends Crawler {
 				start += count;
 			}
 		} catch (Exception exception) {
-			exception.printStackTrace();
+			// do not progress further pages - they don't exist
 		}
 		return convertPerson(personList);
 	}
 
-	public Element searchPeople(int start, int count, String... queryParameters) {
+	private Element searchPeople(int start, int count,
+			String... queryParameters) {
 		StringBuffer query = new StringBuffer();
 		query.append("people-search:(people:" + PERSON_FIELDS
 				+ ",num-results)?");
 
 		for (String parameter : queryParameters) {
 			try {
-				query.append(new URI(parameter).toString());
+				query.append(new URI(parameter.replace(" ", "%20")).toString());
 				query.append("&");
 			} catch (URISyntaxException e) {
 				System.err.println("invalid syntax: \"" + parameter + "\"");
@@ -137,6 +141,7 @@ public class PeopleCrawler extends Crawler {
 		query.append("&sort=distance");
 
 		Response response = requester.GET(query.toString());
+		System.out.println(response.getBody());
 		return Elements.fromResponse(response);
 	}
 

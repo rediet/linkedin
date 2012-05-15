@@ -13,6 +13,15 @@ import structure.LInPerson;
 
 public class PeopleUpdateCrawler extends Crawler {
 
+	/*
+	 * SHARE-API ------------------------------ THROTTLE LIMIT:
+	 * http://api.linkedin.com/v1/people/~/shares
+	 * 
+	 * UPDATEs - API -------------------------- THROTTLE LIMIT:
+	 * http://api.linkedin.com/v1/people/~/network/updates?scope=self
+	 * http://api.linkedin.com/v1/people/~/network/updates
+	 */
+
 	public PeopleUpdateCrawler(Request requester) {
 		super(requester);
 	}
