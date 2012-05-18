@@ -31,14 +31,6 @@ public class Connection {
 	public LInPerson getSecond() {
 		return second;
 	}
-	
-	public LInPerson first() {
-		return first;
-	}
-
-	public LInPerson second() {
-		return second;
-	}
 
 	@Override
 	public int hashCode() {

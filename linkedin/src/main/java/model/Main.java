@@ -34,12 +34,17 @@ public class Main {
 
 	public static void main(String[] args) {
 		AccessGenerator generator = null;
-
-		// Get access to the LinkedIn server
 		try {
-			generator = AccessGenerator.generateFromProperties(File.separator + "home" + File.separator + "daniele" + 
-					File.separator + "linkedin" + File.separator
-					+ "linkedin.properties");
+			if (args.length == 1) {
+				generator = AccessGenerator.generateFromProperties(args[0]);
+			} else {
+				// Get access to the LinkedIn server
+				generator = AccessGenerator
+						.generateFromProperties(File.separator + "home"
+								+ File.separator + "daniele" + File.separator
+								+ "linkedin" + File.separator
+								+ "linkedin.properties"); // TODO: change path!
+			}
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -49,18 +54,18 @@ public class Main {
 				generator.getAccessToken());
 
 		GraphBuilder graph = crawlNetwork(requester);
-		
-		// Graph<V, E> where V is the type of the vertices and E is the type of the edges
-        Graph<LInPerson, Connection> g = new SparseMultigraph<LInPerson, Connection>();
+
+		// Graph<V, E> where V is the type of the vertices and E is the type of
+		// the edges
+		Graph<LInPerson, Connection> g = new SparseMultigraph<LInPerson, Connection>();
 
 		for (Connection c : graph.getConnections()) {
-			//System.out.println(c);
+			// System.out.println(c);
 			LInPerson v1 = c.getFirst();
 			LInPerson v2 = c.getSecond();
 			g.addEdge(c, v1, v2);
 		}
-		
-		
+
 	}
 
 	public static GraphBuilder crawlNetwork(Request requester) {
