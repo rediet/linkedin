@@ -42,7 +42,6 @@ public class Main {
 				generator = AccessGenerator
 						.generateFromProperties(File.separator + "home"
 								+ File.separator + "daniele" + File.separator
-								+ "linkedin" + File.separator
 								+ "linkedin.properties"); // TODO: change path!
 			}
 		} catch (IOException e) {
