@@ -3,6 +3,7 @@ package api_crawlers;
 import java.util.Collection;
 import java.util.HashSet;
 
+
 import structure.LInPerson;
 
 public class GraphBuilder {
@@ -28,6 +29,7 @@ public class GraphBuilder {
 	public void addConnection(LInPerson from, LInPerson to) {
 		connections.add(new Connection(from, to));
 	}
+	
 	
 	
 

@@ -54,9 +54,10 @@ public class PeopleCrawler extends Crawler {
 	 * (does not allow relation-to-viewer).
 	 */
 	public List<LInPerson> getFirstDegreeConnections() {
-		Response response = requester.GET("people/~/connections:"
-				+ PERSON_FIELDS);
+		Response response = requester.GET("people/~/connections"
+				/*+ PERSON_FIELDS*/);
 		Element element = Elements.fromResponse(response);
+		//System.out.println(response.getBody());
 		return convertPerson(Elements.extract(element, ElementType.PERSON));
 	}
 
@@ -141,7 +142,7 @@ public class PeopleCrawler extends Crawler {
 		query.append("&sort=distance");
 
 		Response response = requester.GET(query.toString());
-		System.out.println(response.getBody());
+		//System.out.println(response.getBody());
 		return Elements.fromResponse(response);
 	}
 

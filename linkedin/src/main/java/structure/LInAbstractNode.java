@@ -45,7 +45,8 @@ public abstract class LInAbstractNode implements LInNode {
 
 	@Override
 	public String toString() {
-		return this.element.getValue();
+		//return this.element.getValue();
+		return this.element.getChildText("first-name") + " " + this.element.getChildText("last-name");
 	}
 
 }
