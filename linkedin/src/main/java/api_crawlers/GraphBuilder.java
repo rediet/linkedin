@@ -28,5 +28,7 @@ public class GraphBuilder {
 	public void addConnection(LInPerson from, LInPerson to) {
 		connections.add(new Connection(from, to));
 	}
+	
+	
 
 }

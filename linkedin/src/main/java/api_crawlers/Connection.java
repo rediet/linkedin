@@ -23,6 +23,15 @@ public class Connection {
 			this.second = node1;
 		}
 	}
+	
+	public LInPerson getFirst() {
+		return first;
+	}
+	
+	public LInPerson getSecond() {
+		return second;
+	}
+	
 	public LInPerson first() {
 		return first;
 	}

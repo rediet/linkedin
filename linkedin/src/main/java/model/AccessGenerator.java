@@ -103,7 +103,9 @@ public class AccessGenerator {
 
 		File propertiesFile = new File(fileName);
 
+
 		if (propertiesFile.exists()) {
+			
 			properties.load(new FileInputStream(fileName));
 			keys[0] = properties.getProperty("API_KEY");
 			keys[1] = properties.getProperty("API_SECRET");
@@ -112,6 +114,7 @@ public class AccessGenerator {
 		} else {
 			propertiesFile.createNewFile();
 		}
+		
 
 		if (keys[0] == null) {
 			System.out.println("Please enter the API key:");
@@ -124,7 +127,7 @@ public class AccessGenerator {
 			System.out.println("Please enter the API secret:");
 			keys[1] = (new BufferedReader(new InputStreamReader(System.in)))
 					.readLine();
-			properties.setProperty("API_SECRET", keys[0]);
+			properties.setProperty("API_SECRET", keys[1]);
 		}
 
 		access = new AccessGenerator(keys[0], keys[1]);
