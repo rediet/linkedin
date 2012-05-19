@@ -1,7 +1,9 @@
 package model;
 
 
+import java.awt.Color;
 import java.awt.GridLayout;
+import java.awt.Paint;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
@@ -10,6 +12,8 @@ import java.util.List;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
+
+import org.apache.commons.collections15.Transformer;
 
 
 
@@ -155,16 +159,55 @@ public class Main {
 			}
 			
 		});
+		JButton button5 = new JButton("Updated Connections");
+		button5.addActionListener(new ActionListener () {
+
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				PeopleCrawler crawler = new PeopleCrawler(requester);
+				GraphBuilder graph = new GraphBuilder();
+				LInPerson self = crawler.getOwnProfile();
+				List<LInPerson> people = crawler.getFirstDegreeConnections();
+				graph.addConnection(self, people);
+				for (Connection c : graph.getConnections()) {
+					c.setType(1);
+				}
+				
+				for (Connection c : crawler.getUpdatedConnections()){
+					c.setType(2);
+					graph.addConnection(c);
+				}
+				
+				Graph<LInPerson, Connection> g = new SparseMultigraph<LInPerson, Connection>();
+
+				for (Connection c : graph.getConnections()) {
+					//System.out.println(c);
+					LInPerson v1 = c.getFirst();
+					LInPerson v2 = c.getSecond();
+					g.addEdge(c, v1, v2);
+				}
+				
+				visualizeGraph(g, "Updates Connections");
+				
+				
+				
+			}
+			
+		});
 		
-		frame.setLayout(new GridLayout(2, 2));
+		
+		frame.setLayout(new GridLayout(3, 3));
 		frame.add(button1);
 		frame.add(button2);
 		frame.add(button3);
 		frame.add(button4);
+		frame.add(button5);
 		
 		frame.setSize(400, 200);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setVisible(true);
+		
+		
 
 		
 	}
@@ -174,6 +217,13 @@ public class Main {
 		Layout<String, String> layout = new CircleLayout(g);
 		   
         BasicVisualizationServer<String,String> vv = new BasicVisualizationServer<String,String>(layout);
+     // Setup up a new vertex to paint transformer...
+        /*Transformer<String,Paint> vertexPaint = new Transformer<String,Paint>() {
+            public Paint transform(String i) {
+            	if (g.)
+                return Color.GREEN;
+            }
+        }; */
         
         vv.getRenderContext().setVertexLabelTransformer(new ToStringLabeller());
        // vv.getRenderContext().setEdgeLabelTransformer(new ToStringLabeller());

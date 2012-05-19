@@ -2,6 +2,7 @@ package api_crawlers;
 
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.LinkedList;
 import java.util.List;
 
 import model.Request;
@@ -161,5 +162,26 @@ public class PeopleCrawler extends Crawler {
 				+ "/connections:" + PERSON_FIELDS);
 		Element element = Elements.fromResponse(response);
 		return convertPerson(Elements.extract(element, ElementType.PERSON));
+	}
+	
+	public List<Connection> getUpdatedConnections(){
+		//Retrieve the member's first-degree connection updates
+		Response response = requester.GET("people/~/network/updates");
+		Element element = Elements.fromResponse(response);
+		//System.out.println(response.getBody());
+		List<Element> connUpdates = Elements.extract(element, ElementType.UPDATE);
+		List<Connection> newConn = new LinkedList<Connection>();
+		for (Element e : connUpdates) {
+			if (Elements.extractAll(e, ElementType.PERSON).size() == 2) {
+				LInPerson one = new LInPerson(Elements.extractAll(e, ElementType.PERSON).get(0));
+				LInPerson two = new LInPerson(Elements.extractAll(e, ElementType.PERSON).get(1));
+				newConn.add(new Connection(one, two));
+			}
+		}
+		
+		/*for (Connection c : newConn) {
+			System.out.println(c);
+		}*/
+		return newConn;
 	}
 }

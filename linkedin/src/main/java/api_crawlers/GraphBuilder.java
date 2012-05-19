@@ -30,6 +30,10 @@ public class GraphBuilder {
 		connections.add(new Connection(from, to));
 	}
 	
+	public void addConnection(Connection c) {
+		connections.add(c);
+	}
+	
 	
 	
 

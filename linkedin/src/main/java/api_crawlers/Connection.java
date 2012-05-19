@@ -5,6 +5,8 @@ import structure.LInPerson;
 public class Connection {
 
 	private LInPerson first, second;
+	
+	private int type; //1 first degree, 2 second degree etc...
 
 	/**
 	 * Stores two LInPerson objects in a Connection object. The ordering is not
@@ -58,5 +60,13 @@ public class Connection {
 	public String toString() {
 		return "Connection [first=" + first.getId() + ", second="
 				+ second.getId() + "]";
+	}
+
+	public int getType() {
+		return type;
+	}
+
+	public void setType(int type) {
+		this.type = type;
 	}
 }
