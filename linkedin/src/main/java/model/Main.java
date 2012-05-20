@@ -230,7 +230,7 @@ public class Main {
         vv.getRenderer().getVertexLabelRenderer().setPosition(Position.CNTR);        
         
         JFrame frame = new JFrame(title);
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         frame.getContentPane().add(vv);
         frame.pack();
         frame.setVisible(true); 
