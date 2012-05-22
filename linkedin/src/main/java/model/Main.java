@@ -1,22 +1,19 @@
 package model;
 
 
-import java.awt.Color;
 import java.awt.GridLayout;
-import java.awt.Paint;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.File;
 import java.io.IOException;
 import java.util.List;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
 
-import org.apache.commons.collections15.Transformer;
-
-
-
+import structure.LInPerson;
+import api_crawlers.Connection;
+import api_crawlers.GraphBuilder;
+import api_crawlers.PeopleCrawler;
 import edu.uci.ics.jung.algorithms.layout.CircleLayout;
 import edu.uci.ics.jung.algorithms.layout.Layout;
 import edu.uci.ics.jung.graph.Graph;
@@ -25,16 +22,7 @@ import edu.uci.ics.jung.visualization.BasicVisualizationServer;
 import edu.uci.ics.jung.visualization.decorators.ToStringLabeller;
 import edu.uci.ics.jung.visualization.renderers.Renderer.VertexLabel.Position;
 
-import structure.LInPerson;
-
-import api_crawlers.Connection;
-import api_crawlers.GraphBuilder;
-import api_crawlers.PeopleCrawler;
-
 public class Main {
-
-	private static final String DANIELE = "scar4b1FXy";
-	private static final String REMO = "7fV1HdMLHo";
 
 	public static void main(String[] args) {
 		AccessGenerator generator = null;
@@ -44,9 +32,7 @@ public class Main {
 			} else {
 				// Get access to the LinkedIn server
 				generator = AccessGenerator
-						.generateFromProperties(File.separator + "home"
-								+ File.separator + "daniele" + File.separator
-								+ "linkedin.properties"); // TODO: change path!
+						.generateFromProperties("linkedin.properties");
 			}
 		} catch (IOException e) {
 			e.printStackTrace();
