@@ -1,7 +1,5 @@
 LinkedIn social network analyzing tool to visualize network topology and information flow within the LinkedIn network.
-
-Github repository:
-https://github.com/rediet/linkedin
+Note: This project was part of a university study and will not be developed any further.
 
 
 Eclipse project: The project and its dependencies are built with apache maven
@@ -15,7 +13,6 @@ Project issues:
   "v1/people/id=<2nd-deg-id>/connections"
   "v1/people/id=<2nd-deg-id>:(connections)"
   -> You cannot "browse connections." That is, you can only get the connections of the user who granted your application access. You cannot get connections of that user's connections.
-
 - The number of total search results for people is limited and depends on the account type
   normal member: max 110
- 
+- Potential security vulnerabilities due to outdated dependencies
